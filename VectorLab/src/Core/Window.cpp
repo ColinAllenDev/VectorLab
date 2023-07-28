@@ -2,7 +2,8 @@
 
 #include <SDL2/SDL.h>
 
-using namespace VL::Display;
+// Todo: potentially wrap this file in namespace
+using namespace VL;
 
 Window::Window(char* p_title, uint p_width, uint p_height, uint p_x, uint p_y) 
 {
@@ -41,4 +42,9 @@ Window::~Window()
     }
 
     SDL_Quit();
+}
+
+Window* Window::Create(char* p_title, uint p_width, uint p_height, uint p_x, uint p_y) 
+{
+    return new Window(p_title, p_width, p_height, p_x, p_y);
 }

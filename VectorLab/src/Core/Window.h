@@ -1,15 +1,12 @@
-#ifndef WINDOW_H
-#define WINDOW_H
+#pragma once
 
-#include "Core/Core.h"
-
-using namespace VL::Core;
-using namespace VL::Core::Types;
+#include "Base.h"
+#include "Types.h"
 
 struct SDL_Window;
 struct SDL_Surface;
 
-namespace VL::Display
+namespace VL
 {
     class Window 
     {
@@ -25,7 +22,7 @@ namespace VL::Display
         char* m_window_title;
         SDL_Window* m_sdl_window;
         SDL_Surface* m_sdl_surface;
-    };    
+    public:
+        static Window* Create(char* p_title, uint p_width, uint p_height, uint p_x = (0x1FFF0000u|(0)), uint p_y = (0x1FFF0000u|(0)));
+    };  
 }
-
-#endif

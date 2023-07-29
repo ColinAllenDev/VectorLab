@@ -9,7 +9,7 @@ namespace VL
     class Log 
     {
     public:
-        static void init();
+        static void Init();
 
         inline static std::shared_ptr<spdlog::logger>& GetLogger() { return m_logger; }
     private:

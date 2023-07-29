@@ -1,9 +1,12 @@
 #include "../PCH.h"
 #include "Application.h"
 
+#include "Log.h"
+#include <SDL2/SDL.h>
+
 namespace VL 
 {
-    Application* Application::s_Instance = nullptr;
+    Application* Application::s_Instance = nullptr;    
 
     Application::Application() 
     {
@@ -11,12 +14,24 @@ namespace VL
         s_Instance = this;
 
         // Create window
-        m_Window = std::unique_ptr<Window>(Window::Create("Sandbox", 640, 480));
+        m_Window = std::unique_ptr<Window>(Window::Create());
     }
 
     void Application::Run() 
     {
-        while (m_Running) {}
+        SDL_Event event;
+        while (m_Running) 
+        {
+            while (SDL_PollEvent(&event) != 0) 
+            {
+                switch(event.type) 
+                {
+                    case SDL_QUIT : 
+                        m_Running = false; 
+                    break;
+                }
+            }   
+        }
     }
 
 }

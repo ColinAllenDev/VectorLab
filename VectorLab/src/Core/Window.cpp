@@ -2,49 +2,49 @@
 
 #include <SDL2/SDL.h>
 
-// Todo: potentially wrap this file in namespace
-using namespace VL;
-
-Window::Window(char* p_title, uint p_width, uint p_height, uint p_x, uint p_y) 
+namespace VL 
 {
-    // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) == 0) 
+    Window::Window(const WindowProps& props) 
     {
-        m_sdl_window = SDL_CreateWindow(p_title, p_x, p_y, p_width, p_height, SDL_WINDOW_SHOWN);
-
-        if (m_sdl_window != NULL) 
+        // Initialize SDL
+        if (SDL_Init(SDL_INIT_VIDEO) == 0) 
         {
-            m_sdl_surface = SDL_GetWindowSurface(m_sdl_window);
-    
-            SDL_FillRect(m_sdl_surface, NULL, SDL_MapRGB(m_sdl_surface->format, 18, 18, 18));
-            
-            SDL_UpdateWindowSurface(m_sdl_window);
+            m_sdl_window = SDL_CreateWindow(props.title, props.x, props.y, props.width, props.height, SDL_WINDOW_SHOWN);
+
+            if (m_sdl_window != NULL) 
+            {
+                m_sdl_surface = SDL_GetWindowSurface(m_sdl_window);
+
+                SDL_FillRect(m_sdl_surface, NULL, SDL_MapRGB(m_sdl_surface->format, 18, 18, 18));
+
+                SDL_UpdateWindowSurface(m_sdl_window);
+            } else {
+                // Log error using SDL_GetError()
+            }
         } else {
             // Log error using SDL_GetError()
         }
-    } else {
-        // Log error using SDL_GetError()
+
+        // Assign member values
+        m_window_width = props.width;
+        m_window_height = props.height;
+        m_window_x = props.x;
+        m_window_y = props.y;
+        m_window_title = props.title;
     }
 
-    // Assign member values
-    m_window_width = p_width;
-    m_window_height = p_height;
-    m_window_x = p_x;
-    m_window_y = p_y;
-    m_window_title = p_title;
-}
-
-Window::~Window() 
-{
-    if (m_sdl_window != NULL) 
+    Window::~Window() 
     {
-        SDL_DestroyWindow(m_sdl_window);
+        if (m_sdl_window != NULL) 
+        {
+            SDL_DestroyWindow(m_sdl_window);
+        }
+
+        SDL_Quit();
     }
 
-    SDL_Quit();
-}
-
-Window* Window::Create(char* p_title, uint p_width, uint p_height, uint p_x, uint p_y) 
-{
-    return new Window(p_title, p_width, p_height, p_x, p_y);
+    Window* Window::Create(const WindowProps& props)
+    {
+        return new Window(props);
+    }
 }

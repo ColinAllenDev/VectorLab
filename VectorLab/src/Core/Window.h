@@ -11,7 +11,20 @@ namespace VL
     class Window 
     {
     public:
-        Window(char* p_title, uint p_width, uint p_height, uint p_x = (0x1FFF0000u|(0)), uint p_y = (0x1FFF0000u|(0)));
+        struct WindowProps {
+            char* title;
+            uint width;
+            uint height;
+            uint x;
+            uint y;
+            WindowProps(char* p_title = "VectorLab",
+                        uint p_width = 640, uint p_height = 480,
+                        uint p_x = (0x1FFF0000u|(0)),
+                        uint p_y = (0x1FFF0000u|(0))) 
+            : title(p_title), width(p_width), height(p_height), x(p_x), y(p_y) {}
+        };
+    public:
+        Window(const WindowProps& props);
         ~Window();
     private:
         uint m_id;
@@ -23,6 +36,6 @@ namespace VL
         SDL_Window* m_sdl_window;
         SDL_Surface* m_sdl_surface;
     public:
-        static Window* Create(char* p_title, uint p_width, uint p_height, uint p_x = (0x1FFF0000u|(0)), uint p_y = (0x1FFF0000u|(0)));
+        static Window* Create(const WindowProps& props = WindowProps());
     };  
 }

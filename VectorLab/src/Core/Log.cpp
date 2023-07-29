@@ -7,7 +7,7 @@ namespace VL
 {
     std::shared_ptr<spdlog::logger> Log::m_logger;
 
-    void Log::init() 
+    void Log::Init() 
     {
         // Log Pattern: TIMESTAMP LOGGER_NAME: LOG_MSG
 		// See https://github.com/gabime/spdlog/wiki/3.-Custom-formatting

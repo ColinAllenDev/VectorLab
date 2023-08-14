@@ -1,7 +1,6 @@
 #include "../PCH.h"
 #include "Application.h"
 
-#include "Log.h"
 #include <SDL2/SDL.h>
 
 namespace VL 
@@ -10,7 +9,7 @@ namespace VL
 
     Application::Application() 
     {
-        // VL_ASSERT(!s_Instance, "Application already exists!")
+        VL_ASSERT(!s_Instance, "Application already exists!")
         s_Instance = this;
 
         // Create window

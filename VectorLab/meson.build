@@ -8,4 +8,16 @@ runtime_sources = [
     'src/Core/Window.h', 'src/Core/Window.cpp'
 ]
 
-lib_vl = static_library('vectorlab', runtime_sources, install : false)
+include_directories = [
+    'include/spdlog/include',
+    'include/glad/include'
+]
+
+deps = [dependency('SDL2'), dependency('fmt')]
+
+lib_vl = static_library('vectorlab', runtime_sources,
+    include_directories : include_directories,
+    dependencies : deps,
+    link_args : '-DVL_PLATFORM_LINUX, -Wwrite-strings',
+    install : false
+)

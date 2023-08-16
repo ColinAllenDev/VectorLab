@@ -28,6 +28,7 @@ namespace VL
         ~Window();
 
         void Update();
+        void Init();
     private:
         uint m_id;
         uint m_window_width;

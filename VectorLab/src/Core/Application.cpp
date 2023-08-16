@@ -5,32 +5,29 @@
 
 namespace VL 
 {
-    Application* Application::s_Instance = nullptr;    
+    Application* Application::s_instance = nullptr;    
 
     Application::Application() 
     {
-        VL_ASSERT(!s_Instance, "Application already exists!")
-        s_Instance = this;
+        VL_ASSERT(!s_instance, "Application already exists!")
+        s_instance = this;
 
         // Create window
-        m_Window = std::unique_ptr<Window>(Window::Create());
+        m_window = std::unique_ptr<Window>(Window::Create());
     }
 
     void Application::Run() 
     {
-        SDL_Event event;
-        while (m_Running) 
+        while(m_running) 
         {
-            while (SDL_PollEvent(&event) != 0) 
-            {
-                switch(event.type) 
-                {
-                    case SDL_QUIT : 
-                        m_Running = false; 
-                    break;
-                }
-            }   
+            m_window->Update();
         }
+    }
+
+    void Application::Shutdown() {
+        VL_ASSERT(s_instance, "Application does not exist!")
+        s_instance = nullptr;
+        m_running = false;
     }
 
 }

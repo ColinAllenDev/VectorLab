@@ -13,12 +13,14 @@ namespace VL
         /** Main Engine Loop */
 		void Run();
 
-        inline Window& GetWindow() { return *m_Window; }
+        void Shutdown();
+
+        inline Window& GetWindow() { return *m_window; }
     private:
-        bool m_Running = true;
-        std::unique_ptr<Window> m_Window;
+        bool m_running = true;
+        std::unique_ptr<Window> m_window;
     private:
-        static Application* s_Instance;
+        static Application* s_instance;
     };
 
     // Defined by client application

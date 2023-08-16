@@ -9,8 +9,8 @@ runtime_sources = [
 ]
 
 include_directories = [
-    'include/spdlog/include',
-    'include/glad/include'
+    'vendor/spdlog/include',
+    'vendor/glad/include'
 ]
 
 deps = [dependency('SDL2'), dependency('fmt')]

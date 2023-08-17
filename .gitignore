@@ -1,3 +1,5 @@
 VectorLab/build/*
 VectorLab/bin/*
+Sandbox/build/*
+Sandbox/bin/*
 .vscode/*

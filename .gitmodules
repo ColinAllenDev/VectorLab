@@ -1,0 +1,12 @@
+[submodule "VectorLab/vendor/bgfx"]
+	path = VectorLab/vendor/bgfx
+	url = https://github.com/bkaradzic/bgfx.git
+[submodule "VectorLab/vendor/bx"]
+	path = VectorLab/vendor/bx
+	url = https://github.com/bkaradzic/bx.git
+[submodule "VectorLab/vendor/bimg"]
+	path = VectorLab/vendor/bimg
+	url = https://github.com/bkaradzic/bimg.git
+[submodule "VectorLab/vendor/spdlog"]
+	path = VectorLab/vendor/spdlog
+	url = https://github.com/gabime/spdlog.git

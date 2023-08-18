@@ -12,9 +12,7 @@ namespace VL
         
         /** Main Engine Loop */
 		void Run();
-
-        void Shutdown();
-
+        
         inline Window& GetWindow() { return *m_window; }
     private:
         bool m_running = true;

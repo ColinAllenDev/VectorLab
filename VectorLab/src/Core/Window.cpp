@@ -1,9 +1,10 @@
 #include "Window.h"
-
-#include <bgfx/bgfx.h>
-#include <bgfx/platform.h>
+#include "Log.h"
+#include <glad/glad.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_syswm.h>
+
+static SDL_GLContext m_sdl_context;
 
 namespace VL 
 {
@@ -16,36 +17,35 @@ namespace VL
         m_window_y = props.y;
         m_window_title = props.title;
 
-
         // == Initialize API: SDL == //
         if (SDL_Init(SDL_INIT_VIDEO) == 0) 
         {
-            m_sdl_window = SDL_CreateWindow(m_window_title, m_window_x, m_window_y, m_window_width, m_window_height, SDL_WINDOW_SHOWN);
+            // Load OpenGL
+            SDL_GL_LoadLibrary(NULL);
+            SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+            SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+            SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+            
+            m_sdl_window = SDL_CreateWindow(m_window_title, m_window_x, m_window_y, m_window_width, m_window_height, SDL_WINDOW_OPENGL);
+            m_sdl_context = SDL_GL_CreateContext(m_sdl_window);
+
+            VL_ASSERT(m_sdl_context, "SDL_GL_CreateContext error: {}", SDL_GetError());
+
+            // Initialize GLAD
+            if (gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) 
+            {
+                VL_INFO("OpenGL ({}) Loaded! [Vendor: {} Renderer: {}]",
+                        *glGetString(GL_VERSION), *glGetString(GL_VENDOR), *glGetString(GL_RENDERER));
+            } else {
+                VL_ERROR("gladLoadGLLoader Error!");
+            }
+            // Use Vsync
+            SDL_GL_SetSwapInterval(1);
+            // Set glViewport size
+            glViewport(m_window_x, m_window_y, m_window_width, m_window_height);
         } else {
-            // Log error using SDL_GetError()
+            VL_ERROR("SDL Init Error: {}", SDL_GetError());
         }
-
-        // == Initialize API: BGFW == //
-        // Get system info from SDL
-        SDL_SysWMinfo wmi;
-        SDL_VERSION(&wmi.version);
-        VL_ASSERT(!SDL_GetWindowWMInfo(m_sdl_window, &wmi), "SDL Error: Cannot find WM!")
-
-        // Supply pointer to window to bgfx platform data object
-        bgfx::PlatformData pd;
-        pd.ndt = wmi.info.x11.display;
-        pd.nwh = (void*)(uintptr_t)wmi.info.x11.window;
-        
-        // Tell bgfx about the platform data
-        bgfx::setPlatformData(pd);
-
-        // Initialize BGFX
-        bgfx::Init bgfx_init;
-        bgfx_init.type = bgfx::RendererType::Count; // Automatically choose a renderer
-        bgfx_init.resolution.width = m_window_width;
-        bgfx_init.resolution.height = m_window_height;
-        bgfx_init.resolution.reset = BGFX_RESET_VSYNC;
-        bgfx::init(bgfx_init);
     }
 
     Window::~Window() 
@@ -55,21 +55,29 @@ namespace VL
             SDL_DestroyWindow(m_sdl_window);
         }
 
-        bgfx::shutdown();
         SDL_Quit();
-    }
-
-    void Window::Init() 
-    {
     }
 
     void Window::Update() 
     {
-        VL_ASSERT(m_sdl_window, "SDL Window does not exist!")
+        VL_ASSERT(m_sdl_window, "Window does not exist!")     
+        
+        SDL_Event current_event;
+        while (m_running) 
+        {
+            /* Render Loop */
+            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
 
-        m_sdl_surface = SDL_GetWindowSurface(m_sdl_window);
-        SDL_FillRect(m_sdl_surface, NULL, SDL_MapRGB(m_sdl_surface->format, 18, 18, 18));        
-        SDL_UpdateWindowSurface(m_sdl_window);
+            // Swap Buffers
+            SDL_GL_SwapWindow(m_sdl_window);
+
+            /* Event Loop */
+            while(SDL_PollEvent(&current_event)) 
+            {
+                if (current_event.type == SDL_QUIT) m_running = false;
+            }
+        }
     }
 
     Window* Window::Create(const WindowProps& props)

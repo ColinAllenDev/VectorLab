@@ -19,8 +19,8 @@ namespace VL
             uint y;
             WindowProps(char* p_title = (char*)"VectorLab",
                         uint p_width = 640, uint p_height = 480,
-                        uint p_x = (0x1FFF0000u|(0)),
-                        uint p_y = (0x1FFF0000u|(0))) 
+                        uint p_x = 0,
+                        uint p_y = 0) 
             : title(p_title), width(p_width), height(p_height), x(p_x), y(p_y) {}
         };
     public:
@@ -28,7 +28,6 @@ namespace VL
         ~Window();
 
         void Update();
-        void Init();
     private:
         uint m_id;
         uint m_window_width;
@@ -39,6 +38,8 @@ namespace VL
         
         SDL_Window* m_sdl_window;
         SDL_Surface* m_sdl_surface;
+
+        bool m_running = true;
     public:
         static Window* Create(const WindowProps& props = WindowProps());
     };  

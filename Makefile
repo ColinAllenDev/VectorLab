@@ -24,7 +24,7 @@ VL_INCLUDES = -I$(VL_INCLUDE_PATH) \
 # TODO: Add platform-specific libraries 
 # TODO: Find a way to automate building of submodules
 VL_LIB_FLAGS	= -L$(VL_LIB_PATH)/glad/
-VL_LIBS 		= -lGL -glad -lSDL2 -lvulkan -lX11 -ldl -lfmt -lpthread -lrt  
+VL_LIBS 		= -lGL -glad -lSDL2 -lX11 -ldl -lfmt -lpthread -lrt  
 
 VL_SRCS = $(wildcard $(VL_SRC_PATH)/**/*.cpp)
 VL_OBJS = $(patsubst $(wildcard $(VL_SRC_PATH)/**/)%.cpp, VectorLab/build/%.o, $(VL_SRCS))

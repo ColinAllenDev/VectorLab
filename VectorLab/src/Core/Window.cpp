@@ -25,11 +25,13 @@ namespace VL
             SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+            SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+            SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
             
             m_sdl_window = SDL_CreateWindow(m_window_title, m_window_x, m_window_y, m_window_width, m_window_height, SDL_WINDOW_OPENGL);
+            VL_ASSERT(m_sdl_window, "SDL Error: {}", SDL_GetError());
             m_sdl_context = SDL_GL_CreateContext(m_sdl_window);
-
-            VL_ASSERT(m_sdl_context, "SDL_GL_CreateContext error: {}", SDL_GetError());
+            VL_ASSERT(m_sdl_context, "SDL Error: {}", SDL_GetError());
 
             // Initialize GLAD
             if (gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) 
@@ -39,10 +41,16 @@ namespace VL
             } else {
                 VL_ERROR("gladLoadGLLoader Error!");
             }
+            
             // Use Vsync
             SDL_GL_SetSwapInterval(1);
+            
             // Set glViewport size
             glViewport(m_window_x, m_window_y, m_window_width, m_window_height);
+
+            // Enable depth buffer
+            glEnable(GL_DEPTH_TEST);
+
         } else {
             VL_ERROR("SDL Init Error: {}", SDL_GetError());
         }
@@ -61,13 +69,15 @@ namespace VL
     void Window::Update() 
     {
         VL_ASSERT(m_sdl_window, "Window does not exist!")     
-        
+
         SDL_Event current_event;
         while (m_running) 
         {
             /* Render Loop */
+
+            // Clear
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             // Swap Buffers
             SDL_GL_SwapWindow(m_sdl_window);

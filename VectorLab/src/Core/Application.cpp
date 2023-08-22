@@ -1,9 +1,13 @@
-#include "../PCH.h"
 #include "Application.h"
+
+#include <PCH.h>
+#include <Core/Window.h>
+#include <Render/Renderer.h>
 
 namespace VL 
 {
     Application* Application::s_instance = nullptr;    
+    Application* Application::GetInstance() { return s_instance; }
 
     Application::Application() 
     {
@@ -11,11 +15,14 @@ namespace VL
         s_instance = this;
 
         // Create window
-        m_window = std::unique_ptr<Window>(Window::Create());
+        m_window = Window::Create();
+        m_renderer = Renderer::Create();
     }
 
     void Application::Run() 
     {
         m_window->Update();
     }
+
+
 }

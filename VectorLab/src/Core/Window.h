@@ -23,24 +23,23 @@ namespace VL
                         uint p_y = 0) 
             : title(p_title), width(p_width), height(p_height), x(p_x), y(p_y) {}
         };
-    public:
+
+        static Window* Create(const WindowProps& props = WindowProps());
+
         Window(const WindowProps& props);
         ~Window();
 
+    public:
         void Update();
+
+        inline WindowProps* GetProps() { return &m_props; }
+        inline SDL_Window* GetSDL() { return m_sdl_window; }
     private:
-        uint m_id;
-        uint m_window_width;
-        uint m_window_height; 
-        uint m_window_x;
-        uint m_window_y;
-        char* m_window_title;
-        
+        WindowProps m_props;
+
         SDL_Window* m_sdl_window;
         SDL_Surface* m_sdl_surface;
 
         bool m_running = true;
-    public:
-        static Window* Create(const WindowProps& props = WindowProps());
     };  
 }

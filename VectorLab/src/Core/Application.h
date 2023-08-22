@@ -1,24 +1,27 @@
 #pragma once
 
-#include "Base.h"
-#include "Window.h"
+#include <Core/Base.h>
 
 namespace VL
 {
+    class Window;
+    class Renderer;
     class Application 
     {
     public:
+        static Application* GetInstance();
+        inline Window* GetWindow() { return m_window; }
+        inline Renderer* GetRenderer() { return m_renderer; }
+
+        void Run();
+    protected:
         Application();
-        
-        /** Main Engine Loop */
-		void Run();
-        
-        inline Window& GetWindow() { return *m_window; }
-    private:
-        bool m_running = true;
-        std::unique_ptr<Window> m_window;
-    private:
         static Application* s_instance;
+    private:
+        Window* m_window;
+        Renderer* m_renderer;
+        
+        bool m_running = true;
     };
 
     // Defined by client application

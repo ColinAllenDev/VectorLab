@@ -1,20 +1,24 @@
 
+class SDL_Window;
 namespace VL 
 {
+    class Window;
     class Renderer 
-    {
-        // Forward declarations
-        class Window;
+    {   
     public:
+        static Renderer* GetInstance();
+        static Renderer* Create();
         // Initialize render API
         void Init();
         // Main loop used by the renderer.
         void Update();
         // Shutdown routine
         void Shutdown();
-
+    protected:
+        Renderer();
+        static Renderer* s_instance;
     private:
-        // The window we're rendering to
-        Window* m_window;
+        SDL_Window* sdl_window;
+        bool m_running = true;
     };
 }

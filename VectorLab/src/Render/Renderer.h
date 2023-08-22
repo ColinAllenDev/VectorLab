@@ -10,7 +10,8 @@ namespace VL
         void Init();
         // Main loop used by the renderer.
         void Update();
-        // 
+        // Shutdown routine
+        void Shutdown();
 
     private:
         // The window we're rendering to
